@@ -16,9 +16,8 @@
 *.cache
 *.ilk
 *.log
-*.dll
-!TechElevator*.dll
-*.lib
+#*.dll
+#*.lib
 *.sbr
 bin/
 obj/
