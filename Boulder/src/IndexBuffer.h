@@ -5,8 +5,10 @@ class IndexBuffer
 private:
 	unsigned int boulder_indexBufferID;
 public:
-	IndexBuffer(const void* indexBufferData, unsigned int size);
+	IndexBuffer();
 	~IndexBuffer();
+
+	void Gen(const void* indexBufferData, unsigned int size);
 
 	void Bind() const;
 	void Unbind() const;

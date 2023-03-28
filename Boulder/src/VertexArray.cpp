@@ -3,6 +3,18 @@
 
 VertexArray::VertexArray()
 {
+	
+}
+
+VertexArray::~VertexArray()
+{
+	GLCall(glDeleteVertexArrays(1, &boulder_vertexArrayID));
+}
+
+void VertexArray::Gen(const VertexBuffer* vb)
+{
+	vb->Bind();
+
 	//Vertex Array
 	GLCall(glGenVertexArrays(1, &boulder_vertexArrayID));
 	GLCall(glBindVertexArray(boulder_vertexArrayID));
@@ -11,23 +23,16 @@ VertexArray::VertexArray()
 	unsigned int count = 2;
 	unsigned int type = GL_FLOAT;
 	unsigned int isNormalised = GL_FALSE;
-	unsigned int stride = 0;
+	unsigned int stride = 4 * 4;
 
 	//Position Arrtibute
 	GLCall(glEnableVertexAttribArray(0));
 	glVertexAttribPointer(0, count, type, isNormalised, stride, (const void*)offset);
 
-	//offset += 2 * GL_FLOAT;
+	offset += 2 * GL_FLOAT;
 	//UV Arrtubute
-	//GLCall(glEnableVertexAttribArray(1));
-	//glVertexAttribPointer(1, count, type, isNormalised, stride, (const void*)offset);
-
-	Unbind();
-}
-
-VertexArray::~VertexArray()
-{
-	GLCall(glDeleteVertexArrays(1, &boulder_vertexArrayID));
+	GLCall(glEnableVertexAttribArray(1));
+	glVertexAttribPointer(1, count, type, isNormalised, stride, (const void*)offset);
 }
 
 void VertexArray::Bind() const

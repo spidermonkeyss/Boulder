@@ -1,5 +1,6 @@
 #include "src/GLCall.h"
 #include "src/RenderObject.h"
+#include "src/Shader.h"
 
 #include <iostream>
 #include <string>
@@ -43,12 +44,12 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     std::cout << "Version: " << glfwGetVersionString() << std::endl;
 
-    float data[8] =
+    float data[16] =
     {
-        0.0f, 0.0f,//Bot left
-        100.0f, 0.0f,//Bot right
-        100.0f, 100.0f,//Top right
-        0.0f, 100.0f
+        0.0f, 0.0f, 0.0f, 0.0f,//Bot left
+        1.0f, 0.0f, 1.0f, 0.0f,//Bot right
+        1.0f, 1.0f, 1.0f, 1.0f,//Top right
+        0.0f, 1.0f, 0.0f, 1.0f //Top left
     };
 
     unsigned int indexBufferData[6] =
@@ -57,16 +58,17 @@ int main(void)
         2, 3, 0
     };
 
-    RenderObject ro(data, 8, indexBufferData, 6);
+    Shader shader("Boulder/res/Shaders/Basic.shader", false);
+    RenderObject ro(data, 16, indexBufferData, 6);
 
     while (!glfwWindowShouldClose(window))
     {
         GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
         GLCall(glClearColor(0.14f, 0.5f, 0.85f, 1.0f));
 
+        shader.Bind();
         ro.Bind();
-        GLCall(glDrawElements(GL_TRIANGLES, 4, GL_UNSIGNED_INT, nullptr));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
