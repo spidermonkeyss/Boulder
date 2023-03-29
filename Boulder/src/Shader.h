@@ -4,8 +4,7 @@
 #include <unordered_map>
 
 #include "../Dependencies/GLEW/include/GL/glew.h"
-
-//#include "glm/glm.hpp"
+#include "../Dependencies/glm/glm/glm.hpp"
 
 struct ShaderProgramSource
 {
@@ -35,7 +34,7 @@ public:
 	void SetUniform1iv(const std::string& name, int size, int* value);
 	void SetUniform2f(const std::string& name, float v1, float v2);
 	void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
-	//void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 
 	inline std::string GetFilePath() { return m_FilePath; }
 private:

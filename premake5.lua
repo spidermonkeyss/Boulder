@@ -18,7 +18,7 @@ project "Boulder"
 		"Boulder/src/**.h", 
 		"Boulder/src/**.hpp",
 		"Boulder/src/**.cpp",
-		"Boulder/Main.cpp"
+		"Boulder/Boulder.cpp"
 	}
 	
 	libdirs

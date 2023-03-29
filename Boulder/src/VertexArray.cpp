@@ -20,19 +20,21 @@ void VertexArray::Gen(const VertexBuffer* vb)
 	GLCall(glBindVertexArray(boulder_vertexArrayID));
 
 	unsigned int offset = 0;
-	unsigned int count = 2;
+	unsigned int positionCount = 2;
+	unsigned int uvCount = 2;
 	unsigned int type = GL_FLOAT;
 	unsigned int isNormalised = GL_FALSE;
-	unsigned int stride = 4 * 4;
+	unsigned int sizeOfFloat = 4;
+	unsigned int stride = (positionCount + uvCount) * sizeOfFloat;
 
 	//Position Arrtibute
 	GLCall(glEnableVertexAttribArray(0));
-	glVertexAttribPointer(0, count, type, isNormalised, stride, (const void*)offset);
+	glVertexAttribPointer(0, positionCount, type, isNormalised, stride, (const void*)offset);
 
-	offset += 2 * GL_FLOAT;
+	offset += positionCount * sizeOfFloat;
 	//UV Arrtubute
 	GLCall(glEnableVertexAttribArray(1));
-	glVertexAttribPointer(1, count, type, isNormalised, stride, (const void*)offset);
+	glVertexAttribPointer(1, uvCount, type, isNormalised, stride, (const void*)offset);
 }
 
 void VertexArray::Bind() const
