@@ -19,7 +19,7 @@ public:
 	static int debug_texture_count;
 
 	void Bind(unsigned int slot = 0) const;
-	void Unbine() const;
+	void Unbind() const;
 
 	void CreateTexture(unsigned char* buffer, int width, int height, int bpp);
 	

@@ -28,7 +28,7 @@ Shader::Shader(const std::string & filepath, bool useGeometryShader)
 
 Shader::~Shader()
 {
-	std::cout << "Shader created id:" << boulder_shaderID << std::endl;
+	std::cout << "Shader deleted id:" << boulder_shaderID << std::endl;
 	GLCall(glDeleteProgram(boulder_shaderID));
 }
 

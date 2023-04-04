@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Dependencies/GLEW/include/GL/glew.h"
-#include "../Dependencies/glfw-3.3.8.bin.WIN64/include/GLFW/glfw3.h"
+#include "../../Dependencies/GLEW/include/GL/glew.h"
+#include "../../Dependencies/glfw-3.3.8.bin.WIN64/include/GLFW/glfw3.h"
 
 #include <iostream>
 

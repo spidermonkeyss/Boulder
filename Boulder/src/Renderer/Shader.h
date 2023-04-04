@@ -3,8 +3,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "../Dependencies/GLEW/include/GL/glew.h"
-#include "../Dependencies/glm/glm/glm.hpp"
+#include "../../Dependencies/GLEW/include/GL/glew.h"
+#include "../../Dependencies/glm/glm/glm.hpp"
 
 struct ShaderProgramSource
 {

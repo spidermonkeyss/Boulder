@@ -1,14 +1,10 @@
-#include "src/GLCall.h"
-#include "src/RenderObject.h"
-#include "src/Shader.h"
-#include "src/Texture.h"
-#include "Dependencies/glm/glm/gtc/matrix_transform.hpp"
+#pragma once
+
+#include "src/Scene.h"
 
 #include <iostream>
-#include <string>
-#include <vector>
 
-int main(void)
+int BoulderRun()
 {
     GLFWwindow* window;
 
@@ -49,6 +45,9 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     std::cout << "Version: " << glfwGetVersionString() << std::endl;
 
+    Renderer renderer(windowWidth, windowHeight);
+    Scene scene(&renderer);
+
     float data[16] =
     {
         -0.5f, -0.5f, 0.0f, 0.0f,//Bot left
@@ -63,47 +62,53 @@ int main(void)
         2, 3, 0
     };
 
-    Shader shader("Boulder/res/Shaders/Basic.shader", false);
-    shader.Bind();
+    std::vector<std::unique_ptr<Shader>> shaders;
+    //scope
+    {
+        std::unique_ptr<Shader> s(new Shader("res/Shaders/Basic.shader", false));
+        shaders.push_back(std::move(s));
+    }
 
-    Texture testTexture("Boulder/res/Textures/blue_circle.png");
-    testTexture.Bind(0);
-    shader.SetUniform1i("u_Texture", 0);
+    std::vector<std::unique_ptr<Texture>> textures;
+    //scope
+    {
+        std::unique_ptr<Texture> t(new Texture("res/Textures/blue_circle.png"));
+        textures.push_back(std::move(t));
+        std::unique_ptr<Texture> t2(new Texture("res/Textures/pika.png"));
+        textures.push_back(std::move(t2));
+    }
 
-    RenderObject ro(data, 16, indexBufferData, 6);
-    ro.SetTransformPosition(0, 0);
-
-    std::vector<RenderObject*> renderObjects;
-    renderObjects.push_back(&ro);
-
-    glm::mat4 viewMatrix = glm::mat4(1.0f);
-    float aspectRatio = (float)windowWidth / (float)windowHeight;
-    float projWidth = 4.0f;
-    float projHeight = projWidth / aspectRatio;
-    glm::mat4 projectionMatrix = glm::ortho(-projWidth / 2, projWidth / 2, -projHeight / 2, projHeight / 2, -1.0f, 1.0f);
-
+    int tNum = 0;
+    for (int y = 0; y < 4; y++)
+    {
+        for (int x = 0; x < 4; x++)
+        {
+            SceneObject* so = scene.CreateSceneObject();
+            so->SetPosition(x * 0.3f, y * 0.3f);
+            so->AddRenderObject();
+            so->renderObject->GenBuffers(data, 16, indexBufferData, 6);
+            //so->renderObject->SetTexture(textures[tNum].get());
+            so->renderObject->SetTexture(textures[0].get());
+            so->renderObject->SetShader(shaders[0].get());
+        }
+    }
+   
     while (!glfwWindowShouldClose(window))
     {
-        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-        GLCall(glClearColor(0.14f, 0.5f, 0.85f, 1.0f));
-
-        shader.SetUniformMat4f("u_v", viewMatrix);
-        shader.SetUniformMat4f("u_p", projectionMatrix);
-        
-        for (int i = 0; i < renderObjects.size(); i++)
-        {
-            renderObjects[i]->Bind();
-            shader.SetUniformMat4f("u_m", *renderObjects[i]->GetTransformMatrix());
-        }
-
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        renderer.Clear();
+        renderer.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    //glfwDestroyWindow(window);
+    //glfwTerminate();
 
     return 0;
+}
+
+int main(void)
+{
+    return BoulderRun();
 }

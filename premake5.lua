@@ -3,7 +3,7 @@ workspace "2DRenderer"
 	platforms { "x64" }
 
 project "Boulder"
-	location ""
+	location "Boulder"
 	language "C++"
 	kind "ConsoleApp"
 

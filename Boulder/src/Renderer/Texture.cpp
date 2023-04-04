@@ -1,6 +1,6 @@
 #include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "../Dependencies/stb_image/stb_image.h"
+#include "../../Dependencies/stb_image/stb_image.h"
 
 int Texture::debug_texture_count = 0;
 
@@ -52,7 +52,7 @@ void Texture::Bind(unsigned int slot) const
 	GLCall(glBindTexture(GL_TEXTURE_2D, boulder_textureID));
 }
 
-void Texture::Unbine() const
+void Texture::Unbind() const
 {
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }

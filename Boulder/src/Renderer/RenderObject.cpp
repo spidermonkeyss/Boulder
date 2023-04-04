@@ -1,6 +1,11 @@
 #include "RenderObject.h"
-#include "../Dependencies/glm/glm/gtc/matrix_transform.hpp"
+#include "../../Dependencies/glm/glm/gtc/matrix_transform.hpp"
 
+
+RenderObject::RenderObject()
+{
+
+}
 
 RenderObject::RenderObject(const void* vertexBufferData, unsigned int vertexBufferCount, const void* indexBufferData, unsigned int indexBufferCount)
 {
@@ -16,7 +21,14 @@ RenderObject::~RenderObject()
 
 }
 
-void RenderObject::SetTransformPosition(float x, float y)
+void RenderObject::GenBuffers(const void* vertexBufferData, unsigned int vertexBufferCount, const void* indexBufferData, unsigned int indexBufferCount)
+{
+	vb.Gen(vertexBufferData, vertexBufferCount);
+	ib.Gen(indexBufferData, indexBufferCount);
+	va.Gen(&vb);
+}
+
+void RenderObject::SetMatrixPosition(float x, float y)
 {
 	transformMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0));
 	/*
@@ -33,8 +45,20 @@ void RenderObject::SetTransformPosition(float x, float y)
 	*/
 }
 
+void RenderObject::SetTexture(Texture* texture)
+{
+	this->texture = texture;
+}
+
+void RenderObject::SetShader(Shader* shader)
+{
+	this->shader = shader;
+}
+
 void RenderObject::Bind() const
 {
+	shader->Bind();
+	texture->Bind(0);
 	vb.Bind();
 	ib.Bind();
 	va.Bind();
@@ -42,6 +66,8 @@ void RenderObject::Bind() const
 
 void RenderObject::Unbind() const
 {
+	shader->Unbind();
+	texture->Unbind();
 	vb.Unbind();
 	ib.Unbind();
 	va.Unbind();
