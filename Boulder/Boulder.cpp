@@ -1,8 +1,59 @@
 #pragma once
-
 #include "src/Scene.h"
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include "Dependencies/rapidjson/document.h"
+
+void LoadScene(std::string sceneFileName)
+{
+    std::ifstream myFile("res/Scenes/scene1.json");
+    std::ostringstream tmp;
+    tmp << myFile.rdbuf();
+    const char* jsonStr = tmp.str().c_str();
+
+    rapidjson::Document d;
+    d.Parse(jsonStr);
+
+    //rapidjson::Value& s = d["sceneName"];
+    
+    //s.SetInt(s.GetInt() + 1);
+
+    // 3. Stringify the DOM
+    //StringBuffer buffer;
+    //Writer<StringBuffer> writer(buffer);
+    //d.Accept(writer);
+
+    // Output {"project":"rapidjson","stars":11}
+    //std::cout << buffer.GetString() << std::endl;
+
+
+
+    //Shaders
+    Scene::loadedScene->renderer->LoadShader("Basic.shader");
+
+    //Textures
+    Scene::loadedScene->renderer->LoadTexture("blue_circle.png");
+    Scene::loadedScene->renderer->LoadTexture("pika.png");
+
+    //Objects
+    for (int y = 0; y < 4; y++)
+    {
+        for (int x = 0; x < 4; x++)
+        {
+            RenderObjectParameters rop;
+
+            rop.position = Vector2(x * 0.3f, y * 0.3f);
+            rop.bottomLeft = Vector2(-0.5f, -1.5f);
+            rop.topRight = Vector2(0.5f, 0.5f);
+            rop.shaderId = 0;
+            rop.textureId = 1;
+
+            Scene::loadedScene->CreateRenderObject(rop);
+        }
+    }
+}
 
 int BoulderRun()
 {
@@ -48,51 +99,8 @@ int BoulderRun()
     Renderer renderer(windowWidth, windowHeight);
     Scene scene(&renderer);
 
-    float data[16] =
-    {
-        -0.5f, -0.5f, 0.0f, 0.0f,//Bot left
-         0.5f, -0.5f, 1.0f, 0.0f,//Bot right
-         0.5f,  0.5f, 1.0f, 1.0f,//Top right
-        -0.5f,  0.5f, 0.0f, 1.0f //Top left
-    };
+    LoadScene("scene1.json");
 
-    unsigned int indexBufferData[6] =
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    std::vector<std::unique_ptr<Shader>> shaders;
-    //scope
-    {
-        std::unique_ptr<Shader> s(new Shader("res/Shaders/Basic.shader", false));
-        shaders.push_back(std::move(s));
-    }
-
-    std::vector<std::unique_ptr<Texture>> textures;
-    //scope
-    {
-        std::unique_ptr<Texture> t(new Texture("res/Textures/blue_circle.png"));
-        textures.push_back(std::move(t));
-        std::unique_ptr<Texture> t2(new Texture("res/Textures/pika.png"));
-        textures.push_back(std::move(t2));
-    }
-
-    int tNum = 0;
-    for (int y = 0; y < 4; y++)
-    {
-        for (int x = 0; x < 4; x++)
-        {
-            SceneObject* so = scene.CreateSceneObject();
-            so->SetPosition(x * 0.3f, y * 0.3f);
-            so->AddRenderObject();
-            so->renderObject->GenBuffers(data, 16, indexBufferData, 6);
-            //so->renderObject->SetTexture(textures[tNum].get());
-            so->renderObject->SetTexture(textures[0].get());
-            so->renderObject->SetShader(shaders[0].get());
-        }
-    }
-   
     while (!glfwWindowShouldClose(window))
     {
         renderer.Clear();

@@ -1,20 +1,32 @@
 #pragma once
-#include "SceneObject.h"
 #include "Renderer/Renderer.h"
+#include "BoulderObject.h"
 
 #include <vector>
 #include <memory>
 
+struct RenderObjectParameters
+{
+	Vector2 position;
+	Vector2 bottomLeft;
+	Vector2 topRight;
+	unsigned int shaderId = 0;
+	unsigned int textureId = 0;
+};
+
 class Scene
 {
-private:
-	std::vector<std::unique_ptr<SceneObject>> sceneObjects;
 public:
+	static Scene* loadedScene;
+
 	Renderer* renderer;
+	
+	std::vector<std::unique_ptr<RenderObject>> renderObjects;
+	
+	std::vector<BoulderObject*> objects;
+
 	Scene(Renderer* renderer);
 	~Scene();
 
-	SceneObject* CreateSceneObject();
-
-	inline std::vector<std::unique_ptr<SceneObject>>* GetSceneObjects() { return &sceneObjects; }
+	RenderObject* CreateRenderObject(RenderObjectParameters rop);
 };

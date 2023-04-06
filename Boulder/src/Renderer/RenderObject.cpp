@@ -3,22 +3,12 @@
 
 
 RenderObject::RenderObject()
+	:BoulderObject()
 {
-
-}
-
-RenderObject::RenderObject(const void* vertexBufferData, unsigned int vertexBufferCount, const void* indexBufferData, unsigned int indexBufferCount)
-{
-	vb.Gen(vertexBufferData, vertexBufferCount);
-	ib.Gen(indexBufferData, indexBufferCount);
-	va.Gen(&vb);
-
-	transformMatrix = glm::mat4(1.0f);
 }
 
 RenderObject::~RenderObject()
 {
-
 }
 
 void RenderObject::GenBuffers(const void* vertexBufferData, unsigned int vertexBufferCount, const void* indexBufferData, unsigned int indexBufferCount)
@@ -53,6 +43,12 @@ void RenderObject::SetTexture(Texture* texture)
 void RenderObject::SetShader(Shader* shader)
 {
 	this->shader = shader;
+}
+
+void RenderObject::SetPosition(float x, float y)
+{
+	BoulderObject::SetPosition(x, y);
+	SetMatrixPosition(x, y);
 }
 
 void RenderObject::Bind() const

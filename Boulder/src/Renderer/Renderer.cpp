@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "../Scene.h"
 
 Renderer::Renderer(float windowWidth, float windowHeight)
 {
@@ -19,15 +20,15 @@ void Renderer::Clear()
 
 void Renderer::Draw()
 {
-    for (int i = 0; i < renderObjects.size(); i++)
+    for (int i = 0; i < Scene::loadedScene->renderObjects.size(); i++)
     {
-        renderObjects[i]->Bind();
+        Scene::loadedScene->renderObjects[i]->Bind();
 
-        renderObjects[i]->GetShader()->SetUniformMat4f("u_v", viewMatrix);
-        renderObjects[i]->GetShader()->SetUniformMat4f("u_p", projectionMatrix);
+        Scene::loadedScene->renderObjects[i]->GetShader()->SetUniformMat4f("u_v", viewMatrix);
+        Scene::loadedScene->renderObjects[i]->GetShader()->SetUniformMat4f("u_p", projectionMatrix);
 
-        renderObjects[i]->GetShader()->SetUniformMat4f("u_m", *renderObjects[i]->GetTransformMatrix());
-        renderObjects[i]->GetShader()->SetUniform1i("u_Texture", 0);
+        Scene::loadedScene->renderObjects[i]->GetShader()->SetUniformMat4f("u_m", *Scene::loadedScene->renderObjects[i]->GetTransformMatrix());
+        Scene::loadedScene->renderObjects[i]->GetShader()->SetUniform1i("u_Texture", 0);
 
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
     }
@@ -43,6 +44,18 @@ void Renderer::UpdateWindowDimensions(float width, float height)
     windowWidth = width;
     windowHeight = height;
     UpdateProjectionMatrix();
+}
+
+void Renderer::LoadShader(std::string shaderFileName)
+{
+    std::unique_ptr<Shader> s(new Shader("res/Shaders/" + shaderFileName, false));
+    shaders.push_back(std::move(s));
+}
+
+void Renderer::LoadTexture(std::string textureFileName)
+{
+    std::unique_ptr<Texture> t(new Texture("res/Textures/" + textureFileName));
+    textures.push_back(std::move(t));
 }
 
 void Renderer::SetProjectionWidth(float width)

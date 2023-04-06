@@ -1,0 +1,12 @@
+{
+  "sceneName": "scene1",
+  "renderObjects": [
+    {
+      "position": [0, 0],
+      "bottomLeft": [ -0.5, -0.5 ],
+      "topRight": [ 0.5 , 0.5],
+      "shaderId": 0,
+      "textureId": 0
+    }
+  ]
+}
