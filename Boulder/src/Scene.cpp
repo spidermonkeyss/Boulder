@@ -29,6 +29,7 @@ RenderObject* Scene::CreateRenderObject(RenderObjectParameters rop)
 	};
 
 	std::unique_ptr<RenderObject> ro(new RenderObject());
+	ro->name = rop.name;
 	ro->SetPosition(rop.position.x, rop.position.y);
 	ro->GenBuffers(data, 16, indexBufferData, 6);
 	ro->SetShader(Scene::loadedScene->renderer->shaders[rop.shaderId].get());

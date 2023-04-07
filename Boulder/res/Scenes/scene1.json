@@ -2,11 +2,20 @@
   "sceneName": "scene1",
   "renderObjects": [
     {
-      "position": [0, 0],
+      "name": "yum",
+      "position": [ 0.0, 0.0 ],
       "bottomLeft": [ -0.5, -0.5 ],
-      "topRight": [ 0.5 , 0.5],
+      "topRight": [ 0.5, 0.5 ],
       "shaderId": 0,
       "textureId": 0
+    },
+    {
+      "name": "yum2",
+      "position": [ 0.3, 0.3 ],
+      "bottomLeft": [ -0.5, -0.5 ],
+      "topRight": [ 0.5, 0.5 ],
+      "shaderId": 0,
+      "textureId": 1
     }
   ]
 }

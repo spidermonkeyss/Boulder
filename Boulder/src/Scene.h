@@ -7,6 +7,7 @@
 
 struct RenderObjectParameters
 {
+	std::string name;
 	Vector2 position;
 	Vector2 bottomLeft;
 	Vector2 topRight;
